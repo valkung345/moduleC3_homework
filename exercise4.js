@@ -4,6 +4,7 @@
 // Посчитать потребляемую мощность. Таких приборов должно быть, как минимум, два (например, настольная лампа и компьютер).
 // Выбрав прибор, подумайте, какими свойствами он обладает.
 
+// Родительская функция для всех электроприборов
 function ElectricalAppliance(name, power) {
     this.name = name;
     this.power = power;
@@ -20,34 +21,39 @@ ElectricalAppliance.prototype.unplug = function() {
     this.isPlugged = false;
 };
 
+// Подкласс для ламп
 function Lamp(name, brand, power, bulbType) {
-    this.name = name;
+    ElectricalAppliance.call(this, name, power); // вызов родительского конструктора с контекстом текущего объекта
     this.brand = brand;
-    this.power = power;
     this.bulbType = bulbType;
     this.isPlugged = true;
 }
 
-Lamp.prototype = new ElectricalAppliance();
+// Установка правильной цепочки прототипов
+Lamp.prototype = Object.create(ElectricalAppliance.prototype);
+Lamp.prototype.constructor = Lamp;
 
+// Подкласс для компьютеров
 function Computer(name, brand, power, type, functionality) {
-    this.name = name;
+    ElectricalAppliance.call(this, name, power); // вызов родительского конструктора с контекстом текущего объекта
     this.brand = brand;
-    this.power = power;
     this.type = type;
     this.functionality = functionality;
     this.isPlugged = false;
 }
 
-Computer.prototype = new ElectricalAppliance();
+// Установка правильной цепочки прототипов
+Computer.prototype = Object.create(ElectricalAppliance.prototype);
+Computer.prototype.constructor = Computer;
 
+// Создание объектов
 const tableLamp = new Lamp("Table lamp", "Xiaomi", 5, "LED");
-
 const homePC = new Computer("Table PC", "Intel", 120, "stationary", "for work");
 
+// Тестирование
 tableLamp.unplug();
-
 homePC.plugIn();
 
-console.log(homePC)
-console.log(tableLamp)
+// Вывод
+console.log(homePC);
+console.log(tableLamp);
